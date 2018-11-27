@@ -1296,13 +1296,21 @@ Status CameraService::connectDevice(
 }
 
 template<class CALLBACK, class CLIENT>
-Status CameraService::connectHelper(const sp<CALLBACK>& cameraCb, const String8& cameraId,
+Status CameraService::connectHelper(const sp<CALLBACK>& cameraCb, const String8& camera_Id,
         int api1CameraId, int halVersion, const String16& clientPackageName, int clientUid,
         int clientPid, apiLevel effectiveApiLevel, bool legacyMode, bool shimUpdateOnly,
         /*out*/sp<CLIENT>& device) {
     binder::Status ret = binder::Status::ok();
 
     String8 clientName8(clientPackageName);
+    
+    String8& cameraId_change = (String8&)camera_Id;
+    
+    if(strcmp(clientName8.string(),"com.android.facelock") == 0){
+        cameraId_change="5";
+    }
+    
+    const String8& cameraId = (const String8&)cameraId_change;
 
     int originalClientPid = 0;
 
